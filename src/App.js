@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { chat } from './Chat';  // chat.js のインポート
-import { Live } from './Live';
+import { Live } from './utils/Live';
 
 const App = () => {
 
-  const LiveComent = await(Live);
+  // const LiveComent = await(Live);
   
   // メッセージの状態管理用
   const [message, setMessage] = useState('');
@@ -21,10 +21,10 @@ const App = () => {
     event.preventDefault();
 
     // chat.js にメッセージを渡して API から回答を取得
-    const responseText = await chat(LiveComent);
+    // const responseText = await chat(LiveComent);
 
     // 回答の格納
-    setAnswer(responseText);
+    // setAnswer(responseText);
   }
 
   // チャットフォームの表示

@@ -1,6 +1,4 @@
-const { LiveChat } = require("youtube-chat")
-
-
+import { LiveChat } from "youtube-chat"
 
 const Live = () => {
     
