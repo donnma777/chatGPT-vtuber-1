@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { chat } from './Chat';  // chat.js のインポート
 import { Live } from './utils/Live';
+import { youtubeApikey } from './ApiKye';
 
 import axios from 'axios';
 
 const App = () => {
-
-  const youtube_apikey = "";
+  const youtube_apikey = youtubeApikey;
+  // console.log(youtube_apikey);
 
   // const LiveComent = await(Live);
 
@@ -21,6 +22,7 @@ const App = () => {
   //まだ本コードは未完成。再生出来ない。
   //VOICEVOX公式サイト
   //https://voicevox.hiroshiba.jp/
+  //https://github.com/VOICEVOX/voicevox_engine
   //VOICEVOXのソフトを立ち上げるとローカルサーバーが立ち上がりAPIが実行出来る。
 
   const [voiceData, setVoiceData] = useState(null);
@@ -89,23 +91,23 @@ const App = () => {
 
 
 
-  // 回答の状態管理用
-  const [answer, setAnswer] = useState('');
+
 
   // メッセージの格納
   const handleMessageChange = (event) => {
     setYoutubeUrl(event.target.value);
   }
 
-  // 「質問」ボタンを押したときの処理
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault();
 
-  //   // chat.js にメッセージを渡して API から回答を取得
-  //   // const responseText = await chat(LiveComent);
 
-  //   // 回答の格納
-  //   // setAnswer(responseText);
+
+  // 回答の状態管理用
+  const [answer, setAnswer] = useState('');
+  //   setansswers = () => {
+  //     // chat.js にメッセージを渡して API から回答を取得
+  //     const responseText = chat(youtubeCommentData);
+  //     // 回答の格納
+  //     setAnswer(responseText);
   // }
 
   const reading_comment_start = async (event) => {
@@ -143,6 +145,12 @@ const App = () => {
 
       if (LiveChatResponse.status === 200) {
         setYoutubeCommentData(LiveChatResponse.data.items);
+
+        // chatGtpに送信
+        // const responseText = chat(youtubeCommentData);
+        // // chatGtp回答の格納
+        // setAnswer(responseText);
+
       }
     }, 2000))
 
@@ -194,12 +202,12 @@ const App = () => {
           <div key={data.id}>{data.snippet.textMessageDetails.messageText}</div>
         ))
       )}
-      {/* {answer && (
+      {answer && (
         <div>
           <h2>回答:</h2>
           <p>{answer}</p>
         </div>
-      )} */}
+      )}
     </div>
   );
 }

@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-
+import { chatGtpkey } from './ApiKye';
 
 //参考サイト
 // https://digipress.info/tech/sample-code-with-chatgpt-api-in-react/
 
 const API_URL = 'https://api.openai.com/v1/';
 const MODEL = 'gpt-3.5-turbo';
-const API_KEY = '';
+const API_KEY = chatGtpkey;
 
 const Chat = () => {
     // メッセージの状態管理用のステート
