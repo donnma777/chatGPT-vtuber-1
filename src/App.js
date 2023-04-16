@@ -18,88 +18,10 @@ const App = () => {
   const [readingCommentStartFlg, setReadingCommentStartFlg] = useState(false);
   const [reading_comment_StopFlg, setReading_comment_StopFlg] = useState(false);
 
-  // 音声再生
-  //まだ本コードは未完成。再生出来ない。
-  //VOICEVOX公式サイト
-  //https://voicevox.hiroshiba.jp/
-  //https://github.com/VOICEVOX/voicevox_engine
-  //VOICEVOXのソフトを立ち上げるとローカルサーバーが立ち上がりAPIが実行出来る。
-
-  const [voiceData, setVoiceData] = useState(null);
-  const [voice, setVoice] = useState(null);
-
-  const fetchVoiceData = async () => {
-    const parAmaudioQuery = "テスト音声です";
-    const VOICE_VOX_API_URL = "http://localhost:50021";
-    const VOICEVOX_SPEAKER_ID = '10';
-    try {
-      const response = await axios.post(`${VOICE_VOX_API_URL}/audio_query?speaker=${VOICEVOX_SPEAKER_ID}&text=${parAmaudioQuery}`);
-      if (response.status === 200) {
-        setVoiceData(response.data);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchVoiceData();
-  }, []);
-
-  useEffect(() => {
-    if (voiceData) {
-      setVoice(voiceData.voice);
-    }
-  }, [voiceData]);
-
-  console.log(voiceData);
-  console.log(voice);
-
-
-  // VtuberStudio連携
-  //仕様書
-  // https://github.com/DenchiSoft/VTubeStudio#requesting-list-of-hotkeys-available-in-current-or-other-vts-model
-  //http://localhost:8001/
-
-  //まだ未完成
-  const [isVtuberStudioOn, setIsVtuberStudioOn] = useState(false);
-
-  const triggerVtuberStudioHotkey = async () => {
-    const VTUBER_STUDIO_API_URL = "http://localhost:8001";
-    //リクエストに付加するヘッダーの定義
-    const headers = {
-      'Content-Type': 'application/json',
-      'any-header': {
-        apiName: "VTubeStudioPublicAPI",
-        apiVersion: "1.0",
-        requestID: "SomeID",
-        messageType: "HotkeyTriggerRequest",
-        data: {
-          hotkeyID: "HotkeyNameOrUniqueIdOfHotkeyToExecute",
-          itemInstanceID: "Optional_ItemInstanceIdOfLive2DItemToTriggerThisHotkeyFor"
-        }
-      }
-    };
-
-    try {
-      const response = await axios.post(VTUBER_STUDIO_API_URL, { headers: headers });
-      setIsVtuberStudioOn(response.status === 200);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-
-
-
-
   // メッセージの格納
   const handleMessageChange = (event) => {
     setYoutubeUrl(event.target.value);
   }
-
-
-
 
   // 回答の状態管理用
   const [answer, setAnswer] = useState('');
