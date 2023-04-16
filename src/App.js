@@ -23,24 +23,35 @@ const App = () => {
   //https://voicevox.hiroshiba.jp/
   //VOICEVOXのソフトを立ち上げるとローカルサーバーが立ち上がりAPIが実行出来る。
 
-  // const [voice, setVoice] = useState(false);
-  // const [voiceDate, setVoiceData] = useState(false);
+  const [voiceData, setVoiceData] = useState(null);
+  const [voice, setVoice] = useState(null);
 
-  // setVoice = async () => {
-  //   const parAmaudioQuery = "テスト音声です";
-  //   // VOICEVOXのローカルサーバーURL
-  //   const VOICE_VOX_API_URL = "http://localhost:50021";
-  //   // VOICEVOXのSpeakerID
-  //   const VOICEVOX_SPEAKER_ID = '10';
-  //   const appUrl = axios.post(VOICE_VOX_API_URL + '/audio_query?speaker=' + VOICEVOX_SPEAKER_ID + '&text=' + parAmaudioQuery)
-  //
-  //   if (appUrl.status === 200) {
-  //     setVoiceData(appUrl.data);
-  //   }
-  //   console.log(voice);
-  // }
-  // console.log(voiceDate);
+  const fetchVoiceData = async () => {
+    const parAmaudioQuery = "テスト音声です";
+    const VOICE_VOX_API_URL = "http://localhost:50021";
+    const VOICEVOX_SPEAKER_ID = '10';
+    try {
+      const response = await axios.post(`${VOICE_VOX_API_URL}/audio_query?speaker=${VOICEVOX_SPEAKER_ID}&text=${parAmaudioQuery}`);
+      if (response.status === 200) {
+        setVoiceData(response.data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
+  useEffect(() => {
+    fetchVoiceData();
+  }, []);
+
+  useEffect(() => {
+    if (voiceData) {
+      setVoice(voiceData.voice);
+    }
+  }, [voiceData]);
+
+  console.log(voiceData);
+  console.log(voice);
 
 
   // VtuberStudio連携
@@ -49,29 +60,32 @@ const App = () => {
   //http://localhost:8001/
 
   //まだ未完成
-  // const [vtuberStudio, setVtuberStudio] = useState(false);
-  // setVtuberStudio = async () => {
-  //   const VtuberStudio_API_URL = "http://localhost:8001";
-  //   //リクエストに付加するヘッダーの定義
-  //   const headers = {
-  //     'Content-Type': 'application/json',
-  //     'any-header':
-  //     {
-  //       apiName: "VTubeStudioPublicAPI",
-  //       apiVersion: "1.0",
-  //       requestID: "SomeID",
-  //       messageType: "HotkeyTriggerRequest",
-  //       data: {
-  //         hotkeyID: "HotkeyNameOrUniqueIdOfHotkeyToExecute",
-  //         itemInstanceID: "Optional_ItemInstanceIdOfLive2DItemToTriggerThisHotkeyFor"
-  //       }
-  //     }
-  //   }
-  //   axios.post(VtuberStudio_API_URL, { headers: headers });
-  // }
+  const [isVtuberStudioOn, setIsVtuberStudioOn] = useState(false);
 
+  const triggerVtuberStudioHotkey = async () => {
+    const VTUBER_STUDIO_API_URL = "http://localhost:8001";
+    //リクエストに付加するヘッダーの定義
+    const headers = {
+      'Content-Type': 'application/json',
+      'any-header': {
+        apiName: "VTubeStudioPublicAPI",
+        apiVersion: "1.0",
+        requestID: "SomeID",
+        messageType: "HotkeyTriggerRequest",
+        data: {
+          hotkeyID: "HotkeyNameOrUniqueIdOfHotkeyToExecute",
+          itemInstanceID: "Optional_ItemInstanceIdOfLive2DItemToTriggerThisHotkeyFor"
+        }
+      }
+    };
 
-
+    try {
+      const response = await axios.post(VTUBER_STUDIO_API_URL, { headers: headers });
+      setIsVtuberStudioOn(response.status === 200);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
 
 
