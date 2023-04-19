@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { chat } from './Chat';  // chat.js のインポート
-import { Live } from './utils/Live';
+import ChatGptApi  from './utils/chatGptApi';
 
 import axios from 'axios';
 
@@ -80,6 +79,8 @@ const App = () => {
   }
 
   const reading_comment_Stop = async () => {
+
+    ChatGptApi.completions("コード修正してください");
 
     if(reading_comment_StopFlg) {
       return;
