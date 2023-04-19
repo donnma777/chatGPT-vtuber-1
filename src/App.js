@@ -12,7 +12,7 @@ const App = () => {
   const [reading_comment_StopFlg, setReading_comment_StopFlg] = useState(false);
 
   // 回答の状態管理用
-  const [answer, setAnswer] = useState('');
+  // const [answer, setAnswer] = useState('');
 
   // メッセージの格納
   const handleMessageChange = (event) => {
@@ -46,7 +46,7 @@ const App = () => {
 
       const liveCommentData = await YoutubeApi.liveComment(channelId);
 
-      if(liveCommentData.status !== null) {
+      if (liveCommentData.status !== null) {
         setYoutubeCommentData(liveCommentData.items);
       }
     }, 2000))
@@ -61,7 +61,7 @@ const App = () => {
     // テスト的にChatGPT API組み込んでいる
     await ChatGptApi.completions("コード修正してください");
 
-    if(reading_comment_StopFlg) {
+    if (reading_comment_StopFlg) {
       return;
     }
 
@@ -87,11 +87,11 @@ const App = () => {
         </label>
       </form>
       <div>
-          <button onClick={reading_comment_start} disabled={readingCommentStartFlg}>コメント読み取り開始</button>
-        </div>
+        <button onClick={reading_comment_start} disabled={readingCommentStartFlg}>コメント読み取り開始</button>
+      </div>
       <div>
-          <button onClick={reading_comment_Stop} disabled={reading_comment_StopFlg}>コメント読み取り停止</button>
-        </div>
+        <button onClick={reading_comment_Stop} disabled={reading_comment_StopFlg}>コメント読み取り停止</button>
+      </div>
       {youtubeCommentData && (
         youtubeCommentData?.map((data) => (
           <div key={data.id}>{data.snippet.textMessageDetails.messageText}</div>
