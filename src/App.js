@@ -3,7 +3,11 @@ import { chat } from './Chat';  // chat.js のインポート
 import { Live } from './utils/Live';
 import { youtubeApikey } from './ApiKye';
 
+import Voicevox from './VoIcevox'
+
 import axios from 'axios';
+
+const [YoutubeData1, setYoutubeData1] = ('');
 
 const App = () => {
   const youtube_apikey = youtubeApikey;
@@ -63,15 +67,15 @@ const App = () => {
 
       const LiveChatResponse = await axios.get(LiveChatUrl, { params: param });
 
-      console.log(LiveChatResponse)
+      // console.log(LiveChatResponse.data.items.snippet.messageText)
+      console.log(LiveChatResponse);
 
       if (LiveChatResponse.status === 200) {
-        setYoutubeCommentData(LiveChatResponse.data.items);
 
-        // chatGtpに送信
-        // const responseText = chat(youtubeCommentData);
-        // // chatGtp回答の格納
-        // setAnswer(responseText);
+        // console.log(LiveChatResponse.data.items.snippet.messageText) //ここでデータ取得してChatGtpのAPIにリクエストしたい
+        setYoutubeCommentData(LiveChatResponse.data.items);
+        // チャットフォームの表示
+        setYoutubeData1((LiveChatResponse))
 
       }
     }, 2000))
@@ -80,6 +84,10 @@ const App = () => {
     setReadingCommentStartFlg(true);
 
   }
+
+
+  // console.log(youtubeCommentData);
+
 
   const reading_comment_Stop = async () => {
 
@@ -92,14 +100,12 @@ const App = () => {
     setReadingCommentStartFlg(false);
     setReading_comment_StopFlg(true);
 
+
+
+
   }
 
 
-
-
-
-
-  // チャットフォームの表示
   return (
     <div>
       <h4>youtube Live URL</h4>
@@ -135,3 +141,5 @@ const App = () => {
 }
 
 export default App;
+
+export const YoutubeData1Date = YoutubeData1;

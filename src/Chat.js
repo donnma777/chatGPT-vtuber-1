@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { chatGtpkey } from './ApiKye';
 
+import { YoutubeData1Date } from './App' //Appからコメント取得
+
 //参考サイト
 // https://digipress.info/tech/sample-code-with-chatgpt-api-in-react/
 
@@ -10,6 +12,8 @@ const MODEL = 'gpt-3.5-turbo';
 const API_KEY = chatGtpkey;
 
 const Chat = () => {
+
+
     // メッセージの状態管理用のステート
     const [message, setMessage] = useState('');
     // 回答の状態管理用のステート
@@ -66,7 +70,7 @@ const Chat = () => {
                     ...conversation,
                     {
                         'role': 'user',
-                        'content': message,
+                        'content': YoutubeData1Date,
                     },
                 ],
             }, {
