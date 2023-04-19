@@ -17,30 +17,30 @@ const instance = axios.create({
 class ChatGptApi {
 
     // ChatGPTからメッセージを返答API
-    completions(msg) {
+    async completions(msg) {
 
         // API リクエスト
-        const response = null;
+        let response = null;
+
+        try {
+
+            const res = await instance.post(`/chat/completions`, {
+                model: process.env.REACT_APP_CHAT_GPT_API_MODEL,
+                messages: [
+                    {
+                        'role': 'user',
+                        'content': msg,
+                    },
+                ],
+            })
+
+            response = res.data;
+
+        } catch(e) {
+            console.error(e)
+        }
         
-        instance.post(`/chat/completions`, {
-            model: process.env.REACT_APP_CHAT_GPT_API_MODEL,
-            messages: [
-                {
-                    'role': 'user',
-                    'content': msg,
-                },
-            ],
-        })
-        .then(res => {
-            console.log(res)
-            // eslint-disable-next-line no-const-assign
-            response = res;
-        })
-        .catch(e => {
-            console.log(e)
-        })
-        
-        return response
+        return response;
     }
 
 }

@@ -1,14 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import ChatGptApi  from './utils/chatGptApi';
-
-import axios from 'axios';
+import React, { useState } from 'react';
+import ChatGptApi from './utils/chatGptApi';
+import YoutubeApi from './utils/youtubeApi';
 
 const App = () => {
 
-  const youtube_apikey = "";
-
-  // const LiveComent = await(Live);
-  
   // メッセージの状態管理用
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [youtubeCommentAcquisitionFunc, setYoutubeCommentAcquisitionFunc] = useState('');
@@ -24,17 +19,6 @@ const App = () => {
     setYoutubeUrl(event.target.value);
   }
 
-  // 「質問」ボタンを押したときの処理
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault();
-
-  //   // chat.js にメッセージを渡して API から回答を取得
-  //   // const responseText = await chat(LiveComent);
-
-  //   // 回答の格納
-  //   // setAnswer(responseText);
-  // }
-
   const reading_comment_start = async (event) => {
 
     console.log("読み取り開始")
@@ -45,31 +29,25 @@ const App = () => {
 
     const LiveUrl = new URL(youtubeUrl);
     const queryParams = new URLSearchParams(LiveUrl.search);
-    const youtubeVideoUrl  = 'https://www.googleapis.com/youtube/v3/videos';
-    const params = {'key': youtube_apikey, 'id': queryParams.get('v'), 'part': 'liveStreamingDetails'};
+    const liveId = queryParams.get('v')
 
-    const youtubeVideoResponse = await axios.get(youtubeVideoUrl, {params: params});
+    // youtubeビデオデータ取得
+    const liveData = await YoutubeApi.videos(liveId);
 
-    if (youtubeVideoResponse.status !== 200) {
+    if (liveData == null) {
+      console.error("ビデオデータ取得できませんでした");
       return;
     }
 
-    // console.log(youtubeVideoResponse)
-
-    const channelId = youtubeVideoResponse.data.items[0].liveStreamingDetails.activeLiveChatId;
+    const channelId = liveData.items[0].liveStreamingDetails.activeLiveChatId;
     // console.log(channelId)
 
     setYoutubeCommentAcquisitionFunc(setInterval(async () => {
 
-      const LiveChatUrl    = 'https://www.googleapis.com/youtube/v3/liveChat/messages'
-      const param = {'key': youtube_apikey, 'liveChatId': channelId, 'part': 'id,snippet,authorDetails'}
-    
-      const LiveChatResponse = await axios.get(LiveChatUrl, { params: param });
+      const liveCommentData = await YoutubeApi.liveComment(channelId);
 
-      console.log(LiveChatResponse)
-
-      if(LiveChatResponse.status === 200) {
-        setYoutubeCommentData(LiveChatResponse.data.items);
+      if(liveCommentData.status !== null) {
+        setYoutubeCommentData(liveCommentData.items);
       }
     }, 2000))
 
@@ -80,7 +58,8 @@ const App = () => {
 
   const reading_comment_Stop = async () => {
 
-    ChatGptApi.completions("コード修正してください");
+    // テスト的にChatGPT API組み込んでいる
+    await ChatGptApi.completions("コード修正してください");
 
     if(reading_comment_StopFlg) {
       return;
